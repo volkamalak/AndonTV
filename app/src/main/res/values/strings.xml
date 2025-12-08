@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Andon TV</string>
+    <string name="no_work_order">SETLENMİŞ İŞ EMRİ YOKTUR</string>
+    <string name="work_order">İş Emri:</string>
+    <string name="supplier">Tedarikçi</string>
+    <string name="bale_count">Balya Sayısı</string>
+    <string name="total_weight">Toplam Ağırlık</string>
+    <string name="last_bale">Son Balya No</string>
+    <string name="shift_bale_count">Vardiya Balya</string>
+    <string name="left_kazan">SOL KAZAN</string>
+    <string name="right_kazan">SAĞ KAZAN</string>
+    <string name="kg">kg</string>
+    <string name="adet">adet</string>
+</resources>

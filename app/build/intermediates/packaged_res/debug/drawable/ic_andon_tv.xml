@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M24,24m-24,0a24,24 0,1 1,48 0a24,24 0,1 1,-48 0" />
+
+    <!-- TV Screen -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,14 L36,14 L36,32 L12,32 Z" />
+
+    <!-- Factory buildings on screen -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M16,20 L20,20 L20,30 L16,30 Z" />
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M22,18 L26,18 L26,30 L22,30 Z" />
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M28,22 L32,22 L32,30 L28,30 Z" />
+
+    <!-- Warning indicator -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M24,16 m-2,0 a2,2 0,1 1,4 0 a2,2 0,1 1,-4 0" />
+</vector>

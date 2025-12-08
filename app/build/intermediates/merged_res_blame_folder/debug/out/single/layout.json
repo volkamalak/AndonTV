@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "com.isletme.andontv.app-mergeDebugResources-34:/layout/info_card.xml",
+        "source": "com.isletme.andontv.app-main-37:/layout/info_card.xml"
+    },
+    {
+        "merged": "com.isletme.andontv.app-mergeDebugResources-34:/layout/activity_main.xml",
+        "source": "com.isletme.andontv.app-main-37:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.isletme.andontv.app-mergeDebugResources-34:/layout/kazan_layout.xml",
+        "source": "com.isletme.andontv.app-main-37:/layout/kazan_layout.xml"
+    }
+]

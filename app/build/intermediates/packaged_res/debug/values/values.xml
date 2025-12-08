@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent">#FFC107</color>
+    <color name="accent_dark">#FFA000</color>
+    <color name="active_kazan">#4CAF50</color>
+    <color name="black">#000000</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="gray">#757575</color>
+    <color name="inactive_kazan">#424242</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="no_work_order">#FF5722</color>
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="white">#FFFFFF</color>
+    <dimen name="card_corner_radius">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="card_padding">12dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
+    <dimen name="text_size_large">48sp</dimen>
+    <dimen name="text_size_medium">28sp</dimen>
+    <dimen name="text_size_normal">20sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+    <string name="adet">adet</string>
+    <string name="app_name">Andon TV</string>
+    <string name="bale_count">Balya Sayısı</string>
+    <string name="kg">kg</string>
+    <string name="last_bale">Son Balya No</string>
+    <string name="left_kazan">SOL KAZAN</string>
+    <string name="no_work_order">SETLENMİŞ İŞ EMRİ YOKTUR</string>
+    <string name="right_kazan">SAĞ KAZAN</string>
+    <string name="shift_bale_count">Vardiya Balya</string>
+    <string name="supplier">Tedarikçi</string>
+    <string name="total_weight">Toplam Ağırlık</string>
+    <string name="work_order">İş Emri:</string>
+    <style name="Theme.AndonTV" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondaryVariant">@color/accent_dark</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+    <style name="Theme.AndonTV.Fullscreen" parent="Theme.AndonTV">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+</resources>

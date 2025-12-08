@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:id="@+id/kazanContainer"
+    android:background="@color/inactive_kazan">
+
+    <!-- Kazan Başlığı (SOL KAZAN / SAĞ KAZAN) -->
+    <TextView
+        android:id="@+id/tvKazanTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/left_kazan"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="12dp"
+        android:background="@color/primary"
+        android:layout_marginBottom="16dp" />
+
+    <!-- İş Emri Numarası (Büyük Font) -->
+    <TextView
+        android:id="@+id/tvWorkOrderNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="İŞ EMRİ: 12345"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="visible" />
+
+    <!-- İş Emri Yok Mesajı -->
+    <TextView
+        android:id="@+id/tvNoWorkOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_work_order"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone" />
+
+    <!-- Bilgi Kartları için ScrollView -->
+    <ScrollView
+        android:id="@+id/scrollViewCards"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Tedarikçi Bilgisi -->
+            <include
+                android:id="@+id/supplierCard"
+                layout="@layout/info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Balya Sayısı -->
+            <include
+                android:id="@+id/baleCountCard"
+                layout="@layout/info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Toplam Ağırlık -->
+            <include
+                android:id="@+id/totalWeightCard"
+                layout="@layout/info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Son Balya Numarası -->
+            <include
+                android:id="@+id/lastBaleCard"
+                layout="@layout/info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Vardiya Balya Sayısı -->
+            <include
+                android:id="@+id/shiftBaleCountCard"
+                layout="@layout/info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Padding & Margin -->
+    <dimen name="default_padding">16dp</dimen>
+    <dimen name="card_padding">12dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_size_large">48sp</dimen>
+    <dimen name="text_size_medium">28sp</dimen>
+    <dimen name="text_size_normal">20sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_corner_radius">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+</resources>

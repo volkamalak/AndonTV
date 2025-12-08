@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:translateX="10.8"
+        android:translateY="10.8">
+
+        <!-- TV Screen -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M20,25 L88,25 L88,75 L20,75 Z"
+            android:strokeWidth="3"
+            android:strokeColor="#FFFFFF" />
+
+        <!-- TV Frame -->
+        <path
+            android:fillColor="@android:color/transparent"
+            android:pathData="M18,23 L90,23 L90,77 L18,77 Z"
+            android:strokeWidth="4"
+            android:strokeColor="#FFFFFF" />
+
+        <!-- Screen content - Factory icon -->
+        <path
+            android:fillColor="#1976D2"
+            android:pathData="M35,40 L45,40 L45,65 L35,65 Z" />
+        <path
+            android:fillColor="#1976D2"
+            android:pathData="M50,35 L60,35 L60,65 L50,65 Z" />
+        <path
+            android:fillColor="#1976D2"
+            android:pathData="M65,45 L75,45 L75,65 L65,65 Z" />
+
+        <!-- Smoke from factory -->
+        <path
+            android:fillColor="#FFC107"
+            android:pathData="M40,35 Q38,30 40,25"
+            android:strokeWidth="2"
+            android:strokeColor="#FFC107" />
+        <path
+            android:fillColor="#FFC107"
+            android:pathData="M55,30 Q53,25 55,20"
+            android:strokeWidth="2"
+            android:strokeColor="#FFC107" />
+
+        <!-- TV Stand -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M48,77 L60,77 L58,85 L50,85 Z" />
+    </group>
+</vector>

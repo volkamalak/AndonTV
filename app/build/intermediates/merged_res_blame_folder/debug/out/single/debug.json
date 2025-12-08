@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "com.isletme.andontv.app-merged_res-35:/drawable_ic_andon_tv.xml.flat",
+        "source": "com.isletme.andontv.app-main-37:/drawable/ic_andon_tv.xml"
+    },
+    {
+        "merged": "C:\\Users\\volkan.kamalak\\.gradle\\daemon\\8.2\\com.isletme.andontv.app-merged_res-35:\\layout_kazan_layout.xml.flat",
+        "source": "C:\\Users\\volkan.kamalak\\.gradle\\daemon\\8.2\\com.isletme.andontv.app-main-37:\\layout\\kazan_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\volkan.kamalak\\.gradle\\daemon\\8.2\\com.isletme.andontv.app-merged_res-35:\\layout_info_card.xml.flat",
+        "source": "C:\\Users\\volkan.kamalak\\.gradle\\daemon\\8.2\\com.isletme.andontv.app-main-37:\\layout\\info_card.xml"
+    },
+    {
+        "merged": "C:\\Users\\volkan.kamalak\\.gradle\\daemon\\8.2\\com.isletme.andontv.app-merged_res-35:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\volkan.kamalak\\.gradle\\daemon\\8.2\\com.isletme.andontv.app-main-37:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "com.isletme.andontv.app-merged_res-35:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.isletme.andontv.app-main-37:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.isletme.andontv.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.isletme.andontv.app-main-37:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.isletme.andontv.app-merged_res-35:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.isletme.andontv.app-main-37:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.isletme.andontv.app-merged_res-35:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.isletme.andontv.app-main-37:/mipmap-anydpi-v26/ic_launcher.xml"
+    }
+]

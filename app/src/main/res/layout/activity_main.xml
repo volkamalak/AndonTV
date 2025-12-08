@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".MainActivity">
+
+    <!-- Üst başlık alanı -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@color/primary_dark"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Makine Adı (Sol) -->
+        <TextView
+            android:id="@+id/tvMachineName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ELYAF AÇMA MAKİNESİ"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="start|center_vertical" />
+
+        <!-- IP Adresi (Sağ) -->
+        <TextView
+            android:id="@+id/tvIpAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IP: 192.168.1.100"
+            android:textColor="@color/accent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="end|center_vertical" />
+    </LinearLayout>
+
+    <!-- İki kazanlı ana alan (Split Screen) -->
+    <LinearLayout
+        android:id="@+id/mainContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:weightSum="2"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toTopOf="@id/footerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Sol Kazan -->
+        <include
+            android:id="@+id/leftKazanLayout"
+            layout="@layout/kazan_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp" />
+
+        <!-- Ayırıcı çizgi -->
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+
+        <!-- Sağ Kazan -->
+        <include
+            android:id="@+id/rightKazanLayout"
+            layout="@layout/kazan_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp" />
+    </LinearLayout>
+
+    <!-- Alt footer alanı -->
+    <LinearLayout
+        android:id="@+id/footerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@color/primary_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Vardiya (Sol) -->
+        <TextView
+            android:id="@+id/tvShift"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Vardiya: 1"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="start|center_vertical" />
+
+        <!-- Tarih ve Saat (Sağ) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="07.12.2024"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="14:30:45"
+                android:textColor="@color/accent"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
