@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:id="@+id/kazanContainer"
     android:background="@color/inactive_kazan">
 
     <!-- Kazan Başlığı (SOL KAZAN / SAĞ KAZAN) -->

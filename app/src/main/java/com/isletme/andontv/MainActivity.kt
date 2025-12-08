@@ -1,21 +1,31 @@
 package com.isletme.andontv
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import com.isletme.andontv.model.WorkOrder
 import com.isletme.andontv.utils.DateTimeUtils
+import com.isletme.andontv.utils.MockDataProvider
 import com.isletme.andontv.utils.NetworkUtils
 import com.isletme.andontv.viewmodel.AndonViewModel
 
 class MainActivity : AppCompatActivity() {
+
+    // TEST MODU: Backend hazır olmadığında true yapın
+    private val TEST_MODE = true
 
     private lateinit var viewModel: AndonViewModel
     private val timeUpdateHandler = Handler(Looper.getMainLooper())
@@ -86,20 +96,91 @@ class MainActivity : AppCompatActivity() {
         // Saat güncellemesini başlat
         startTimeUpdate()
 
-        // İlk veri çekimini yap ve otomatik yenilemeyi başlat
-        viewModel.startAutoRefresh(this)
+        // Test modu veya gerçek veri
+        if (TEST_MODE) {
+            // Test modu: Dummy data göster
+            loadMockData()
+        } else {
+            // Gerçek mod: Backend'den veri çek
+            viewModel.startAutoRefresh(this)
+        }
+    }
+
+    /**
+     * Test için dummy data yükler
+     * Backend hazır olmadığında ekranın nasıl göründüğünü test etmek için
+     */
+    private fun loadMockData() {
+        // Farklı senaryolar için mock data'ları değiştirebilirsiniz:
+
+        // Senaryo 1: Her iki kazanda da iş emri var
+        val mockData = MockDataProvider.getMockMachineDataBothActive()
+
+        // Senaryo 2: Sadece sol kazanda iş emri var
+        // val mockData = MockDataProvider.getMockMachineDataLeftOnly()
+
+        // Senaryo 3: Her iki kazan da boş
+        // val mockData = MockDataProvider.getMockMachineDataEmpty()
+
+        // Senaryo 4: Çok tedarikçili test
+        // val mockData = MockDataProvider.getMockMachineDataMultipleSuppliers()
+
+        // UI'ı güncelle
+        tvMachineName.text = mockData.machineName
+        tvShift.text = "Vardiya: ${mockData.currentShift}"
+
+        // Sol kazan güncelle
+        updateKazan(
+            workOrder = mockData.leftKazan,
+            container = leftKazanContainer,
+            tvWorkOrder = leftTvWorkOrderNumber,
+            tvNoWorkOrder = leftTvNoWorkOrder,
+            scrollView = leftScrollView,
+            supplierValue = leftSupplierValue,
+            baleCountValue = leftBaleCountValue,
+            totalWeightValue = leftTotalWeightValue,
+            lastBaleValue = leftLastBaleValue,
+            shiftBaleValue = leftShiftBaleValue
+        )
+
+        // Sağ kazan güncelle
+        updateKazan(
+            workOrder = mockData.rightKazan,
+            container = rightKazanContainer,
+            tvWorkOrder = rightTvWorkOrderNumber,
+            tvNoWorkOrder = rightTvNoWorkOrder,
+            scrollView = rightScrollView,
+            supplierValue = rightSupplierValue,
+            baleCountValue = rightBaleCountValue,
+            totalWeightValue = rightTotalWeightValue,
+            lastBaleValue = rightLastBaleValue,
+            shiftBaleValue = rightShiftBaleValue
+        )
     }
 
     private fun setupFullscreenMode() {
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                )
-        actionBar?.hide()
+        // ActionBar'ı gizle
+        supportActionBar?.hide()
+
+        // Android 11 (API 30) ve üzeri için yeni API
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+            window.insetsController?.let { controller ->
+                controller.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            // Android 10 ve altı için eski API (suppress deprecation warning)
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            )
+        }
     }
 
     private fun bindViews() {
@@ -107,43 +188,61 @@ class MainActivity : AppCompatActivity() {
         tvMachineName = findViewById(R.id.tvMachineName)
         tvIpAddress = findViewById(R.id.tvIpAddress)
 
-        // Left Kazan
-        val leftLayout = findViewById<View>(R.id.leftKazanLayout)
-        leftKazanContainer = leftLayout.findViewById(R.id.kazanContainer)
-        leftLayout.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.left_kazan)
-        leftTvWorkOrderNumber = leftLayout.findViewById(R.id.tvWorkOrderNumber)
-        leftTvNoWorkOrder = leftLayout.findViewById(R.id.tvNoWorkOrder)
-        leftScrollView = leftLayout.findViewById(R.id.scrollViewCards)
+        // Left Kazan - Include ID'si direkt olarak root LinearLayout'a işaret eder
+        leftKazanContainer = findViewById(R.id.leftKazanLayout)
+        leftKazanContainer.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.left_kazan)
+        leftTvWorkOrderNumber = leftKazanContainer.findViewById(R.id.tvWorkOrderNumber)
+        leftTvNoWorkOrder = leftKazanContainer.findViewById(R.id.tvNoWorkOrder)
+        leftScrollView = leftKazanContainer.findViewById(R.id.scrollViewCards)
 
-        leftSupplierTitle = leftLayout.findViewById<View>(R.id.supplierCard).findViewById(R.id.tvCardTitle)
-        leftSupplierValue = leftLayout.findViewById<View>(R.id.supplierCard).findViewById(R.id.tvCardValue)
-        leftBaleCountTitle = leftLayout.findViewById<View>(R.id.baleCountCard).findViewById(R.id.tvCardTitle)
-        leftBaleCountValue = leftLayout.findViewById<View>(R.id.baleCountCard).findViewById(R.id.tvCardValue)
-        leftTotalWeightTitle = leftLayout.findViewById<View>(R.id.totalWeightCard).findViewById(R.id.tvCardTitle)
-        leftTotalWeightValue = leftLayout.findViewById<View>(R.id.totalWeightCard).findViewById(R.id.tvCardValue)
-        leftLastBaleTitle = leftLayout.findViewById<View>(R.id.lastBaleCard).findViewById(R.id.tvCardTitle)
-        leftLastBaleValue = leftLayout.findViewById<View>(R.id.lastBaleCard).findViewById(R.id.tvCardValue)
-        leftShiftBaleTitle = leftLayout.findViewById<View>(R.id.shiftBaleCountCard).findViewById(R.id.tvCardTitle)
-        leftShiftBaleValue = leftLayout.findViewById<View>(R.id.shiftBaleCountCard).findViewById(R.id.tvCardValue)
+        // Left Kazan - Card view'ları
+        val leftSupplierCard = leftKazanContainer.findViewById<View>(R.id.supplierCard)
+        leftSupplierTitle = leftSupplierCard.findViewById(R.id.tvCardTitle)
+        leftSupplierValue = leftSupplierCard.findViewById(R.id.tvCardValue)
 
-        // Right Kazan
-        val rightLayout = findViewById<View>(R.id.rightKazanLayout)
-        rightKazanContainer = rightLayout.findViewById(R.id.kazanContainer)
-        rightLayout.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.right_kazan)
-        rightTvWorkOrderNumber = rightLayout.findViewById(R.id.tvWorkOrderNumber)
-        rightTvNoWorkOrder = rightLayout.findViewById(R.id.tvNoWorkOrder)
-        rightScrollView = rightLayout.findViewById(R.id.scrollViewCards)
+        val leftBaleCountCard = leftKazanContainer.findViewById<View>(R.id.baleCountCard)
+        leftBaleCountTitle = leftBaleCountCard.findViewById(R.id.tvCardTitle)
+        leftBaleCountValue = leftBaleCountCard.findViewById(R.id.tvCardValue)
 
-        rightSupplierTitle = rightLayout.findViewById<View>(R.id.supplierCard).findViewById(R.id.tvCardTitle)
-        rightSupplierValue = rightLayout.findViewById<View>(R.id.supplierCard).findViewById(R.id.tvCardValue)
-        rightBaleCountTitle = rightLayout.findViewById<View>(R.id.baleCountCard).findViewById(R.id.tvCardTitle)
-        rightBaleCountValue = rightLayout.findViewById<View>(R.id.baleCountCard).findViewById(R.id.tvCardValue)
-        rightTotalWeightTitle = rightLayout.findViewById<View>(R.id.totalWeightCard).findViewById(R.id.tvCardTitle)
-        rightTotalWeightValue = rightLayout.findViewById<View>(R.id.totalWeightCard).findViewById(R.id.tvCardValue)
-        rightLastBaleTitle = rightLayout.findViewById<View>(R.id.lastBaleCard).findViewById(R.id.tvCardTitle)
-        rightLastBaleValue = rightLayout.findViewById<View>(R.id.lastBaleCard).findViewById(R.id.tvCardValue)
-        rightShiftBaleTitle = rightLayout.findViewById<View>(R.id.shiftBaleCountCard).findViewById(R.id.tvCardTitle)
-        rightShiftBaleValue = rightLayout.findViewById<View>(R.id.shiftBaleCountCard).findViewById(R.id.tvCardValue)
+        val leftTotalWeightCard = leftKazanContainer.findViewById<View>(R.id.totalWeightCard)
+        leftTotalWeightTitle = leftTotalWeightCard.findViewById(R.id.tvCardTitle)
+        leftTotalWeightValue = leftTotalWeightCard.findViewById(R.id.tvCardValue)
+
+        val leftLastBaleCard = leftKazanContainer.findViewById<View>(R.id.lastBaleCard)
+        leftLastBaleTitle = leftLastBaleCard.findViewById(R.id.tvCardTitle)
+        leftLastBaleValue = leftLastBaleCard.findViewById(R.id.tvCardValue)
+
+        val leftShiftBaleCard = leftKazanContainer.findViewById<View>(R.id.shiftBaleCountCard)
+        leftShiftBaleTitle = leftShiftBaleCard.findViewById(R.id.tvCardTitle)
+        leftShiftBaleValue = leftShiftBaleCard.findViewById(R.id.tvCardValue)
+
+        // Right Kazan - Include ID'si direkt olarak root LinearLayout'a işaret eder
+        rightKazanContainer = findViewById(R.id.rightKazanLayout)
+        rightKazanContainer.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.right_kazan)
+        rightTvWorkOrderNumber = rightKazanContainer.findViewById(R.id.tvWorkOrderNumber)
+        rightTvNoWorkOrder = rightKazanContainer.findViewById(R.id.tvNoWorkOrder)
+        rightScrollView = rightKazanContainer.findViewById(R.id.scrollViewCards)
+
+        // Right Kazan - Card view'ları
+        val rightSupplierCard = rightKazanContainer.findViewById<View>(R.id.supplierCard)
+        rightSupplierTitle = rightSupplierCard.findViewById(R.id.tvCardTitle)
+        rightSupplierValue = rightSupplierCard.findViewById(R.id.tvCardValue)
+
+        val rightBaleCountCard = rightKazanContainer.findViewById<View>(R.id.baleCountCard)
+        rightBaleCountTitle = rightBaleCountCard.findViewById(R.id.tvCardTitle)
+        rightBaleCountValue = rightBaleCountCard.findViewById(R.id.tvCardValue)
+
+        val rightTotalWeightCard = rightKazanContainer.findViewById<View>(R.id.totalWeightCard)
+        rightTotalWeightTitle = rightTotalWeightCard.findViewById(R.id.tvCardTitle)
+        rightTotalWeightValue = rightTotalWeightCard.findViewById(R.id.tvCardValue)
+
+        val rightLastBaleCard = rightKazanContainer.findViewById<View>(R.id.lastBaleCard)
+        rightLastBaleTitle = rightLastBaleCard.findViewById(R.id.tvCardTitle)
+        rightLastBaleValue = rightLastBaleCard.findViewById(R.id.tvCardValue)
+
+        val rightShiftBaleCard = rightKazanContainer.findViewById<View>(R.id.shiftBaleCountCard)
+        rightShiftBaleTitle = rightShiftBaleCard.findViewById(R.id.tvCardTitle)
+        rightShiftBaleValue = rightShiftBaleCard.findViewById(R.id.tvCardValue)
 
         // Footer
         tvShift = findViewById(R.id.tvShift)
