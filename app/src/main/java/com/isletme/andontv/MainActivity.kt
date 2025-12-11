@@ -11,10 +11,8 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import com.isletme.andontv.model.WorkOrder
 import com.isletme.andontv.utils.DateTimeUtils
@@ -35,10 +33,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvIpAddress: TextView
 
     // Left Kazan Views
-    private lateinit var leftKazanContainer: LinearLayout
+    private lateinit var leftKazanContainer: ConstraintLayout
     private lateinit var leftTvWorkOrderNumber: TextView
     private lateinit var leftTvNoWorkOrder: TextView
-    private lateinit var leftScrollView: View
+    private lateinit var leftCardsContainer: LinearLayout
     private lateinit var leftSupplierTitle: TextView
     private lateinit var leftSupplierValue: TextView
     private lateinit var leftBaleCountTitle: TextView
@@ -51,10 +49,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var leftShiftBaleValue: TextView
 
     // Right Kazan Views
-    private lateinit var rightKazanContainer: LinearLayout
+    private lateinit var rightKazanContainer: ConstraintLayout
     private lateinit var rightTvWorkOrderNumber: TextView
     private lateinit var rightTvNoWorkOrder: TextView
-    private lateinit var rightScrollView: View
+    private lateinit var rightCardsContainer: LinearLayout
     private lateinit var rightSupplierTitle: TextView
     private lateinit var rightSupplierValue: TextView
     private lateinit var rightBaleCountTitle: TextView
@@ -135,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             container = leftKazanContainer,
             tvWorkOrder = leftTvWorkOrderNumber,
             tvNoWorkOrder = leftTvNoWorkOrder,
-            scrollView = leftScrollView,
+            cardsContainer = leftCardsContainer,
             supplierValue = leftSupplierValue,
             baleCountValue = leftBaleCountValue,
             totalWeightValue = leftTotalWeightValue,
@@ -149,7 +147,7 @@ class MainActivity : AppCompatActivity() {
             container = rightKazanContainer,
             tvWorkOrder = rightTvWorkOrderNumber,
             tvNoWorkOrder = rightTvNoWorkOrder,
-            scrollView = rightScrollView,
+            cardsContainer = rightCardsContainer,
             supplierValue = rightSupplierValue,
             baleCountValue = rightBaleCountValue,
             totalWeightValue = rightTotalWeightValue,
@@ -193,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         leftKazanContainer.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.left_kazan)
         leftTvWorkOrderNumber = leftKazanContainer.findViewById(R.id.tvWorkOrderNumber)
         leftTvNoWorkOrder = leftKazanContainer.findViewById(R.id.tvNoWorkOrder)
-        leftScrollView = leftKazanContainer.findViewById(R.id.scrollViewCards)
+        leftCardsContainer = leftKazanContainer.findViewById(R.id.cardsContainer)
 
         // Left Kazan - Card view'ları
         val leftSupplierCard = leftKazanContainer.findViewById<View>(R.id.supplierCard)
@@ -221,7 +219,7 @@ class MainActivity : AppCompatActivity() {
         rightKazanContainer.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.right_kazan)
         rightTvWorkOrderNumber = rightKazanContainer.findViewById(R.id.tvWorkOrderNumber)
         rightTvNoWorkOrder = rightKazanContainer.findViewById(R.id.tvNoWorkOrder)
-        rightScrollView = rightKazanContainer.findViewById(R.id.scrollViewCards)
+        rightCardsContainer = rightKazanContainer.findViewById(R.id.cardsContainer)
 
         // Right Kazan - Card view'ları
         val rightSupplierCard = rightKazanContainer.findViewById<View>(R.id.supplierCard)
@@ -281,7 +279,7 @@ class MainActivity : AppCompatActivity() {
                     container = leftKazanContainer,
                     tvWorkOrder = leftTvWorkOrderNumber,
                     tvNoWorkOrder = leftTvNoWorkOrder,
-                    scrollView = leftScrollView,
+                    cardsContainer = leftCardsContainer,
                     supplierValue = leftSupplierValue,
                     baleCountValue = leftBaleCountValue,
                     totalWeightValue = leftTotalWeightValue,
@@ -295,7 +293,7 @@ class MainActivity : AppCompatActivity() {
                     container = rightKazanContainer,
                     tvWorkOrder = rightTvWorkOrderNumber,
                     tvNoWorkOrder = rightTvNoWorkOrder,
-                    scrollView = rightScrollView,
+                    cardsContainer = rightCardsContainer,
                     supplierValue = rightSupplierValue,
                     baleCountValue = rightBaleCountValue,
                     totalWeightValue = rightTotalWeightValue,
@@ -315,10 +313,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateKazan(
         workOrder: WorkOrder?,
-        container: LinearLayout,
+        container: ConstraintLayout,
         tvWorkOrder: TextView,
         tvNoWorkOrder: TextView,
-        scrollView: View,
+        cardsContainer: View,
         supplierValue: TextView,
         baleCountValue: TextView,
         totalWeightValue: TextView,
@@ -328,14 +326,14 @@ class MainActivity : AppCompatActivity() {
         if (workOrder == null) {
             // İş emri yok
             tvWorkOrder.visibility = View.GONE
-            scrollView.visibility = View.GONE
+            cardsContainer.visibility = View.GONE
             tvNoWorkOrder.visibility = View.VISIBLE
             container.setBackgroundColor(ContextCompat.getColor(this, R.color.inactive_kazan))
         } else {
             // İş emri var
             tvNoWorkOrder.visibility = View.GONE
             tvWorkOrder.visibility = View.VISIBLE
-            scrollView.visibility = View.VISIBLE
+            cardsContainer.visibility = View.VISIBLE
             tvWorkOrder.text = "İŞ EMRİ: ${workOrder.workOrderNumber}"
 
             // Aktif kazan arka plan rengi
