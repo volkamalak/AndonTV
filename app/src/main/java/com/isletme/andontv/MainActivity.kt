@@ -11,10 +11,10 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import com.isletme.andontv.model.WorkOrder
 import com.isletme.andontv.utils.DateTimeUtils
@@ -24,21 +24,20 @@ import com.isletme.andontv.viewmodel.AndonViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    // TEST MODU: Backend hazır olmadığında true yapın
     private val TEST_MODE = true
 
     private lateinit var viewModel: AndonViewModel
     private val timeUpdateHandler = Handler(Looper.getMainLooper())
 
-    // Header Views
+    private lateinit var rootLayout: ConstraintLayout
+    private lateinit var footerLayout: LinearLayout
     private lateinit var tvMachineName: TextView
     private lateinit var tvIpAddress: TextView
 
-    // Left Kazan Views
-    private lateinit var leftKazanContainer: LinearLayout
+    private lateinit var leftKazanContainer: ConstraintLayout
     private lateinit var leftTvWorkOrderNumber: TextView
     private lateinit var leftTvNoWorkOrder: TextView
-    private lateinit var leftScrollView: View
+    private lateinit var leftCardsContainer: LinearLayout
     private lateinit var leftSupplierTitle: TextView
     private lateinit var leftSupplierValue: TextView
     private lateinit var leftBaleCountTitle: TextView
@@ -50,11 +49,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var leftShiftBaleTitle: TextView
     private lateinit var leftShiftBaleValue: TextView
 
-    // Right Kazan Views
-    private lateinit var rightKazanContainer: LinearLayout
+    private lateinit var rightKazanContainer: ConstraintLayout
     private lateinit var rightTvWorkOrderNumber: TextView
     private lateinit var rightTvNoWorkOrder: TextView
-    private lateinit var rightScrollView: View
+    private lateinit var rightCardsContainer: LinearLayout
     private lateinit var rightSupplierTitle: TextView
     private lateinit var rightSupplierValue: TextView
     private lateinit var rightBaleCountTitle: TextView
@@ -66,7 +64,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rightShiftBaleTitle: TextView
     private lateinit var rightShiftBaleValue: TextView
 
-    // Footer Views
     private lateinit var tvShift: TextView
     private lateinit var tvDate: TextView
     private lateinit var tvTime: TextView
@@ -75,67 +72,39 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Ekranı sürekli açık tut
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        // Tam ekran modunu ayarla
         setupFullscreenMode()
 
-        // View'ları bağla
         bindViews()
+        applySystemBarInsets()
 
-        // ViewModel'i başlat
         viewModel = ViewModelProvider(this)[AndonViewModel::class.java]
 
-        // Observer'ları kur
         setupObservers()
 
-        // IP adresini göster
         displayIpAddress()
 
-        // Saat güncellemesini başlat
         startTimeUpdate()
 
-        // Test modu veya gerçek veri
         if (TEST_MODE) {
-            // Test modu: Dummy data göster
             loadMockData()
         } else {
-            // Gerçek mod: Backend'den veri çek
             viewModel.startAutoRefresh(this)
         }
     }
 
-    /**
-     * Test için dummy data yükler
-     * Backend hazır olmadığında ekranın nasıl göründüğünü test etmek için
-     */
     private fun loadMockData() {
-        // Farklı senaryolar için mock data'ları değiştirebilirsiniz:
-
-        // Senaryo 1: Her iki kazanda da iş emri var
         val mockData = MockDataProvider.getMockMachineDataBothActive()
-
-        // Senaryo 2: Sadece sol kazanda iş emri var
-        // val mockData = MockDataProvider.getMockMachineDataLeftOnly()
-
-        // Senaryo 3: Her iki kazan da boş
-        // val mockData = MockDataProvider.getMockMachineDataEmpty()
-
-        // Senaryo 4: Çok tedarikçili test
-        // val mockData = MockDataProvider.getMockMachineDataMultipleSuppliers()
-
-        // UI'ı güncelle
         tvMachineName.text = mockData.machineName
         tvShift.text = "Vardiya: ${mockData.currentShift}"
 
-        // Sol kazan güncelle
         updateKazan(
             workOrder = mockData.leftKazan,
             container = leftKazanContainer,
             tvWorkOrder = leftTvWorkOrderNumber,
             tvNoWorkOrder = leftTvNoWorkOrder,
-            scrollView = leftScrollView,
+            cardsContainer = leftCardsContainer,
             supplierValue = leftSupplierValue,
             baleCountValue = leftBaleCountValue,
             totalWeightValue = leftTotalWeightValue,
@@ -143,13 +112,12 @@ class MainActivity : AppCompatActivity() {
             shiftBaleValue = leftShiftBaleValue
         )
 
-        // Sağ kazan güncelle
         updateKazan(
             workOrder = mockData.rightKazan,
             container = rightKazanContainer,
             tvWorkOrder = rightTvWorkOrderNumber,
             tvNoWorkOrder = rightTvNoWorkOrder,
-            scrollView = rightScrollView,
+            cardsContainer = rightCardsContainer,
             supplierValue = rightSupplierValue,
             baleCountValue = rightBaleCountValue,
             totalWeightValue = rightTotalWeightValue,
@@ -159,10 +127,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupFullscreenMode() {
-        // ActionBar'ı gizle
         supportActionBar?.hide()
 
-        // Android 11 (API 30) ve üzeri için yeni API
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
             window.insetsController?.let { controller ->
@@ -170,7 +136,6 @@ class MainActivity : AppCompatActivity() {
                 controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             }
         } else {
-            // Android 10 ve altı için eski API (suppress deprecation warning)
             @Suppress("DEPRECATION")
             window.decorView.systemUiVisibility = (
                     View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -184,18 +149,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
-        // Header
+        rootLayout = findViewById(R.id.rootLayout)
+        footerLayout = findViewById(R.id.footerLayout)
+
         tvMachineName = findViewById(R.id.tvMachineName)
         tvIpAddress = findViewById(R.id.tvIpAddress)
 
-        // Left Kazan - Include ID'si direkt olarak root LinearLayout'a işaret eder
         leftKazanContainer = findViewById(R.id.leftKazanLayout)
         leftKazanContainer.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.left_kazan)
         leftTvWorkOrderNumber = leftKazanContainer.findViewById(R.id.tvWorkOrderNumber)
         leftTvNoWorkOrder = leftKazanContainer.findViewById(R.id.tvNoWorkOrder)
-        leftScrollView = leftKazanContainer.findViewById(R.id.scrollViewCards)
+        leftCardsContainer = leftKazanContainer.findViewById(R.id.cardsContainer)
 
-        // Left Kazan - Card view'ları
         val leftSupplierCard = leftKazanContainer.findViewById<View>(R.id.supplierCard)
         leftSupplierTitle = leftSupplierCard.findViewById(R.id.tvCardTitle)
         leftSupplierValue = leftSupplierCard.findViewById(R.id.tvCardValue)
@@ -216,14 +181,12 @@ class MainActivity : AppCompatActivity() {
         leftShiftBaleTitle = leftShiftBaleCard.findViewById(R.id.tvCardTitle)
         leftShiftBaleValue = leftShiftBaleCard.findViewById(R.id.tvCardValue)
 
-        // Right Kazan - Include ID'si direkt olarak root LinearLayout'a işaret eder
         rightKazanContainer = findViewById(R.id.rightKazanLayout)
         rightKazanContainer.findViewById<TextView>(R.id.tvKazanTitle).text = getString(R.string.right_kazan)
         rightTvWorkOrderNumber = rightKazanContainer.findViewById(R.id.tvWorkOrderNumber)
         rightTvNoWorkOrder = rightKazanContainer.findViewById(R.id.tvNoWorkOrder)
-        rightScrollView = rightKazanContainer.findViewById(R.id.scrollViewCards)
+        rightCardsContainer = rightKazanContainer.findViewById(R.id.cardsContainer)
 
-        // Right Kazan - Card view'ları
         val rightSupplierCard = rightKazanContainer.findViewById<View>(R.id.supplierCard)
         rightSupplierTitle = rightSupplierCard.findViewById(R.id.tvCardTitle)
         rightSupplierValue = rightSupplierCard.findViewById(R.id.tvCardValue)
@@ -244,24 +207,39 @@ class MainActivity : AppCompatActivity() {
         rightShiftBaleTitle = rightShiftBaleCard.findViewById(R.id.tvCardTitle)
         rightShiftBaleValue = rightShiftBaleCard.findViewById(R.id.tvCardValue)
 
-        // Footer
         tvShift = findViewById(R.id.tvShift)
         tvDate = findViewById(R.id.tvDate)
         tvTime = findViewById(R.id.tvTime)
 
-        // Kart başlıklarını ayarla
         setupCardTitles()
     }
 
+    private fun applySystemBarInsets() {
+        val rootInitialPadding = rootLayout.paddingBottom
+        val footerInitialPadding = footerLayout.paddingBottom
+
+        ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, rootInitialPadding + systemBars.bottom)
+            footerLayout.setPadding(
+                footerLayout.paddingLeft,
+                footerLayout.paddingTop,
+                footerLayout.paddingRight,
+                footerInitialPadding + systemBars.bottom
+            )
+
+            insets
+        }
+    }
+
     private fun setupCardTitles() {
-        // Left Kazan
         leftSupplierTitle.text = getString(R.string.supplier)
         leftBaleCountTitle.text = getString(R.string.bale_count)
         leftTotalWeightTitle.text = getString(R.string.total_weight)
         leftLastBaleTitle.text = getString(R.string.last_bale)
         leftShiftBaleTitle.text = getString(R.string.shift_bale_count)
 
-        // Right Kazan
         rightSupplierTitle.text = getString(R.string.supplier)
         rightBaleCountTitle.text = getString(R.string.bale_count)
         rightTotalWeightTitle.text = getString(R.string.total_weight)
@@ -275,13 +253,12 @@ class MainActivity : AppCompatActivity() {
                 tvMachineName.text = it.machineName
                 tvShift.text = "Vardiya: ${it.currentShift}"
 
-                // Sol kazan güncelle
                 updateKazan(
                     workOrder = it.leftKazan,
                     container = leftKazanContainer,
                     tvWorkOrder = leftTvWorkOrderNumber,
                     tvNoWorkOrder = leftTvNoWorkOrder,
-                    scrollView = leftScrollView,
+                    cardsContainer = leftCardsContainer,
                     supplierValue = leftSupplierValue,
                     baleCountValue = leftBaleCountValue,
                     totalWeightValue = leftTotalWeightValue,
@@ -289,13 +266,12 @@ class MainActivity : AppCompatActivity() {
                     shiftBaleValue = leftShiftBaleValue
                 )
 
-                // Sağ kazan güncelle
                 updateKazan(
                     workOrder = it.rightKazan,
                     container = rightKazanContainer,
                     tvWorkOrder = rightTvWorkOrderNumber,
                     tvNoWorkOrder = rightTvNoWorkOrder,
-                    scrollView = rightScrollView,
+                    cardsContainer = rightCardsContainer,
                     supplierValue = rightSupplierValue,
                     baleCountValue = rightBaleCountValue,
                     totalWeightValue = rightTotalWeightValue,
@@ -307,7 +283,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.errorMessage.observe(this) { error ->
             error?.let {
-                // Hata durumunda log tutabilir veya gösterebilirsiniz
                 android.util.Log.e("AndonTV", "Error: $it")
             }
         }
@@ -315,10 +290,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateKazan(
         workOrder: WorkOrder?,
-        container: LinearLayout,
+        container: ConstraintLayout,
         tvWorkOrder: TextView,
         tvNoWorkOrder: TextView,
-        scrollView: View,
+        cardsContainer: View,
         supplierValue: TextView,
         baleCountValue: TextView,
         totalWeightValue: TextView,
@@ -326,30 +301,25 @@ class MainActivity : AppCompatActivity() {
         shiftBaleValue: TextView
     ) {
         if (workOrder == null) {
-            // İş emri yok
             tvWorkOrder.visibility = View.GONE
-            scrollView.visibility = View.GONE
+            cardsContainer.visibility = View.GONE
             tvNoWorkOrder.visibility = View.VISIBLE
             container.setBackgroundColor(ContextCompat.getColor(this, R.color.inactive_kazan))
         } else {
-            // İş emri var
             tvNoWorkOrder.visibility = View.GONE
             tvWorkOrder.visibility = View.VISIBLE
-            scrollView.visibility = View.VISIBLE
+            cardsContainer.visibility = View.VISIBLE
             tvWorkOrder.text = "İŞ EMRİ: ${workOrder.workOrderNumber}"
 
-            // Aktif kazan arka plan rengi
             if (workOrder.isActive) {
                 container.setBackgroundColor(ContextCompat.getColor(this, R.color.active_kazan))
             } else {
                 container.setBackgroundColor(ContextCompat.getColor(this, R.color.inactive_kazan))
             }
 
-            // Tedarikçi bilgileri (birden fazla olabilir)
             val supplierNames = workOrder.suppliers.joinToString("\n") { it.supplierName }
             supplierValue.text = supplierNames
 
-            // Diğer bilgiler
             baleCountValue.text = "${workOrder.baleCount} ${getString(R.string.adet)}"
             totalWeightValue.text = "${workOrder.totalWeight} ${getString(R.string.kg)}"
             lastBaleValue.text = workOrder.lastBaleNumber
@@ -367,7 +337,7 @@ class MainActivity : AppCompatActivity() {
             override fun run() {
                 tvDate.text = DateTimeUtils.getCurrentDate()
                 tvTime.text = DateTimeUtils.getCurrentTime()
-                timeUpdateHandler.postDelayed(this, 1000) // Her saniye güncelle
+                timeUpdateHandler.postDelayed(this, 1000)
             }
         }
         timeUpdateHandler.post(updateTimeRunnable)

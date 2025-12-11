@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -27,7 +28,10 @@
             android:layout_weight="1"
             android:text="ELYAF AÇMA MAKİNESİ"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:autoSizeMaxTextSize="28sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
             android:textStyle="bold"
             android:gravity="start|center_vertical" />
 
@@ -38,7 +42,10 @@
             android:layout_height="wrap_content"
             android:text="IP: 192.168.1.100"
             android:textColor="@color/accent"
-            android:textSize="20sp"
+            android:autoSizeMaxTextSize="22sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
             android:textStyle="bold"
             android:gravity="end|center_vertical" />
     </LinearLayout>
@@ -99,7 +106,10 @@
             android:layout_weight="1"
             android:text="Vardiya: 1"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:autoSizeMaxTextSize="22sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
             android:textStyle="bold"
             android:gravity="start|center_vertical" />
 
@@ -116,7 +126,10 @@
                 android:layout_height="wrap_content"
                 android:text="07.12.2024"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
                 android:textStyle="bold" />
 
             <TextView
@@ -125,7 +138,10 @@
                 android:layout_height="wrap_content"
                 android:text="14:30:45"
                 android:textColor="@color/accent"
-                android:textSize="20sp"
+                android:autoSizeMaxTextSize="20sp"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
