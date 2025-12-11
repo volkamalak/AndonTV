@@ -14,10 +14,8 @@ import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
 import androidx.lifecycle.ViewModelProvider
 import com.isletme.andontv.model.WorkOrder
 import com.isletme.andontv.utils.DateTimeUtils
@@ -39,10 +37,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var footerLayout: LinearLayout
     private lateinit var contentFlipper: ViewFlipper
 
-
     private lateinit var tvMachineName: TextView
     private lateinit var tvIpAddress: TextView
-
 
     private lateinit var leftKazanContainer: ConstraintLayout
     private lateinit var leftTvWorkOrderNumber: TextView
@@ -59,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var leftShiftBaleTitle: TextView
     private lateinit var leftShiftBaleValue: TextView
 
-
     private lateinit var rightKazanContainer: ConstraintLayout
     private lateinit var rightTvWorkOrderNumber: TextView
     private lateinit var rightTvNoWorkOrder: TextView
@@ -75,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rightShiftBaleTitle: TextView
     private lateinit var rightShiftBaleValue: TextView
 
-
     private lateinit var singleKazanContainer: ConstraintLayout
     private lateinit var singleTvWorkOrderNumber: TextView
     private lateinit var singleTvNoWorkOrder: TextView
@@ -90,7 +84,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var singleLastBaleValue: TextView
     private lateinit var singleShiftBaleTitle: TextView
     private lateinit var singleShiftBaleValue: TextView
-
 
     private lateinit var tvShift: TextView
     private lateinit var tvDate: TextView
@@ -115,9 +108,7 @@ class MainActivity : AppCompatActivity() {
 
         startTimeUpdate()
 
-
         startScreenToggleIfEnabled()
-
 
         if (TEST_MODE) {
             loadMockData()
@@ -184,11 +175,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
-
         rootLayout = findViewById(R.id.rootLayout)
         footerLayout = findViewById(R.id.footerLayout)
         contentFlipper = findViewById(R.id.contentFlipper)
-
 
         tvMachineName = findViewById(R.id.tvMachineName)
         tvIpAddress = findViewById(R.id.tvIpAddress)
@@ -269,7 +258,6 @@ class MainActivity : AppCompatActivity() {
         val singleShiftBaleCard = findViewById<View>(R.id.singleShiftBaleCard)
         singleShiftBaleTitle = singleShiftBaleCard.findViewById(R.id.tvCardTitle)
         singleShiftBaleValue = singleShiftBaleCard.findViewById(R.id.tvCardValue)
-
 
         tvShift = findViewById(R.id.tvShift)
         tvDate = findViewById(R.id.tvDate)
@@ -390,7 +378,7 @@ class MainActivity : AppCompatActivity() {
                 container.setBackgroundColor(ContextCompat.getColor(this, R.color.inactive_kazan))
             }
 
-            val supplierNames = workOrder.suppliers.joinToString("\n") { it.supplierName }
+            val supplierNames = workOrder.suppliers.joinToString(", ") { it.supplierName }
             supplierValue.text = supplierNames
 
             baleCountValue.text = "${workOrder.baleCount} ${getString(R.string.adet)}"
@@ -418,7 +406,7 @@ class MainActivity : AppCompatActivity() {
                 singleKazanContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.inactive_kazan))
             }
 
-            val supplierNames = workOrder.suppliers.joinToString("\n") { it.supplierName }
+            val supplierNames = workOrder.suppliers.joinToString(", ") { it.supplierName }
             singleSupplierValue.text = supplierNames
 
             singleBaleCountValue.text = "${workOrder.baleCount} ${getString(R.string.adet)}"

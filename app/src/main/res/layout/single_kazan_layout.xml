@@ -63,7 +63,7 @@
 
         <include
             android:id="@+id/singleSupplierCard"
-            layout="@layout/info_card"
+            layout="@layout/info_card_single_line"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -71,7 +71,7 @@
 
         <include
             android:id="@+id/singleBaleCountCard"
-            layout="@layout/info_card"
+            layout="@layout/info_card_single_line"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -79,7 +79,7 @@
 
         <include
             android:id="@+id/singleTotalWeightCard"
-            layout="@layout/info_card"
+            layout="@layout/info_card_single_line"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -87,7 +87,7 @@
 
         <include
             android:id="@+id/singleLastBaleCard"
-            layout="@layout/info_card"
+            layout="@layout/info_card_single_line"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -95,7 +95,7 @@
 
         <include
             android:id="@+id/singleShiftBaleCard"
-            layout="@layout/info_card"
+            layout="@layout/info_card_single_line"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
