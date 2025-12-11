@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvMachineName: TextView
     private lateinit var tvIpAddress: TextView
 
+
     private lateinit var leftKazanContainer: ConstraintLayout
     private lateinit var leftTvWorkOrderNumber: TextView
     private lateinit var leftTvNoWorkOrder: TextView
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var leftLastBaleValue: TextView
     private lateinit var leftShiftBaleTitle: TextView
     private lateinit var leftShiftBaleValue: TextView
+
 
     private lateinit var rightKazanContainer: ConstraintLayout
     private lateinit var rightTvWorkOrderNumber: TextView
