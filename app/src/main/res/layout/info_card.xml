@@ -21,8 +21,10 @@
             android:layout_height="wrap_content"
             android:text="Tedarikçi"
             android:textColor="@color/primary"
+
             android:autoSizeMaxTextSize="16sp"
             android:autoSizeMinTextSize="10sp"
+
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:textStyle="bold"
@@ -35,6 +37,7 @@
             android:layout_height="wrap_content"
             android:text="ABC Tekstil"
             android:textColor="@color/black"
+
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeMinTextSize="10sp"
             android:autoSizeStepGranularity="1sp"
@@ -42,6 +45,7 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:lineSpacingExtra="2dp"
+
             android:textStyle="bold" />
 
     </LinearLayout>
