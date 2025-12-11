@@ -10,6 +10,7 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.ViewFlipper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -27,13 +28,18 @@ import com.isletme.andontv.viewmodel.AndonViewModel
 class MainActivity : AppCompatActivity() {
 
     private val TEST_MODE = true
+    private val ENABLE_SECONDARY_SCREEN = true
 
     private lateinit var viewModel: AndonViewModel
     private val timeUpdateHandler = Handler(Looper.getMainLooper())
-
+    private val screenToggleHandler = Handler(Looper.getMainLooper())
+    private var isMainScreenVisible = true
 
     private lateinit var rootLayout: ConstraintLayout
     private lateinit var footerLayout: LinearLayout
+    private lateinit var contentFlipper: ViewFlipper
+
+
     private lateinit var tvMachineName: TextView
     private lateinit var tvIpAddress: TextView
 
@@ -69,6 +75,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rightShiftBaleTitle: TextView
     private lateinit var rightShiftBaleValue: TextView
 
+
+    private lateinit var singleKazanContainer: ConstraintLayout
+    private lateinit var singleTvWorkOrderNumber: TextView
+    private lateinit var singleTvNoWorkOrder: TextView
+    private lateinit var singleCardsContainer: LinearLayout
+    private lateinit var singleSupplierTitle: TextView
+    private lateinit var singleSupplierValue: TextView
+    private lateinit var singleBaleCountTitle: TextView
+    private lateinit var singleBaleCountValue: TextView
+    private lateinit var singleTotalWeightTitle: TextView
+    private lateinit var singleTotalWeightValue: TextView
+    private lateinit var singleLastBaleTitle: TextView
+    private lateinit var singleLastBaleValue: TextView
+    private lateinit var singleShiftBaleTitle: TextView
+    private lateinit var singleShiftBaleValue: TextView
+
+
     private lateinit var tvShift: TextView
     private lateinit var tvDate: TextView
     private lateinit var tvTime: TextView
@@ -91,6 +114,10 @@ class MainActivity : AppCompatActivity() {
         displayIpAddress()
 
         startTimeUpdate()
+
+
+        startScreenToggleIfEnabled()
+
 
         if (TEST_MODE) {
             loadMockData()
@@ -129,6 +156,9 @@ class MainActivity : AppCompatActivity() {
             lastBaleValue = rightLastBaleValue,
             shiftBaleValue = rightShiftBaleValue
         )
+
+        val singleWorkOrder = mockData.leftKazan ?: mockData.rightKazan
+        updateSingleKazan(singleWorkOrder)
     }
 
     private fun setupFullscreenMode() {
@@ -157,6 +187,7 @@ class MainActivity : AppCompatActivity() {
 
         rootLayout = findViewById(R.id.rootLayout)
         footerLayout = findViewById(R.id.footerLayout)
+        contentFlipper = findViewById(R.id.contentFlipper)
 
 
         tvMachineName = findViewById(R.id.tvMachineName)
@@ -214,6 +245,32 @@ class MainActivity : AppCompatActivity() {
         rightShiftBaleTitle = rightShiftBaleCard.findViewById(R.id.tvCardTitle)
         rightShiftBaleValue = rightShiftBaleCard.findViewById(R.id.tvCardValue)
 
+        singleKazanContainer = findViewById(R.id.singleKazanLayout)
+        singleTvWorkOrderNumber = findViewById(R.id.tvSingleWorkOrderNumber)
+        singleTvNoWorkOrder = findViewById(R.id.tvSingleNoWorkOrder)
+        singleCardsContainer = findViewById(R.id.singleCardsContainer)
+
+        val singleSupplierCard = findViewById<View>(R.id.singleSupplierCard)
+        singleSupplierTitle = singleSupplierCard.findViewById(R.id.tvCardTitle)
+        singleSupplierValue = singleSupplierCard.findViewById(R.id.tvCardValue)
+
+        val singleBaleCountCard = findViewById<View>(R.id.singleBaleCountCard)
+        singleBaleCountTitle = singleBaleCountCard.findViewById(R.id.tvCardTitle)
+        singleBaleCountValue = singleBaleCountCard.findViewById(R.id.tvCardValue)
+
+        val singleTotalWeightCard = findViewById<View>(R.id.singleTotalWeightCard)
+        singleTotalWeightTitle = singleTotalWeightCard.findViewById(R.id.tvCardTitle)
+        singleTotalWeightValue = singleTotalWeightCard.findViewById(R.id.tvCardValue)
+
+        val singleLastBaleCard = findViewById<View>(R.id.singleLastBaleCard)
+        singleLastBaleTitle = singleLastBaleCard.findViewById(R.id.tvCardTitle)
+        singleLastBaleValue = singleLastBaleCard.findViewById(R.id.tvCardValue)
+
+        val singleShiftBaleCard = findViewById<View>(R.id.singleShiftBaleCard)
+        singleShiftBaleTitle = singleShiftBaleCard.findViewById(R.id.tvCardTitle)
+        singleShiftBaleValue = singleShiftBaleCard.findViewById(R.id.tvCardValue)
+
+
         tvShift = findViewById(R.id.tvShift)
         tvDate = findViewById(R.id.tvDate)
         tvTime = findViewById(R.id.tvTime)
@@ -252,6 +309,12 @@ class MainActivity : AppCompatActivity() {
         rightTotalWeightTitle.text = getString(R.string.total_weight)
         rightLastBaleTitle.text = getString(R.string.last_bale)
         rightShiftBaleTitle.text = getString(R.string.shift_bale_count)
+
+        singleSupplierTitle.text = getString(R.string.supplier)
+        singleBaleCountTitle.text = getString(R.string.bale_count)
+        singleTotalWeightTitle.text = getString(R.string.total_weight)
+        singleLastBaleTitle.text = getString(R.string.last_bale)
+        singleShiftBaleTitle.text = getString(R.string.shift_bale_count)
     }
 
     private fun setupObservers() {
@@ -285,6 +348,9 @@ class MainActivity : AppCompatActivity() {
                     lastBaleValue = rightLastBaleValue,
                     shiftBaleValue = rightShiftBaleValue
                 )
+
+                val singleWorkOrder = it.leftKazan ?: it.rightKazan
+                updateSingleKazan(singleWorkOrder)
             }
         }
 
@@ -334,6 +400,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateSingleKazan(workOrder: WorkOrder?) {
+        if (workOrder == null) {
+            singleTvWorkOrderNumber.visibility = View.GONE
+            singleCardsContainer.visibility = View.GONE
+            singleTvNoWorkOrder.visibility = View.VISIBLE
+            singleKazanContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.inactive_kazan))
+        } else {
+            singleTvNoWorkOrder.visibility = View.GONE
+            singleTvWorkOrderNumber.visibility = View.VISIBLE
+            singleCardsContainer.visibility = View.VISIBLE
+            singleTvWorkOrderNumber.text = "İŞ EMRİ: ${workOrder.workOrderNumber}"
+
+            if (workOrder.isActive) {
+                singleKazanContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.active_kazan))
+            } else {
+                singleKazanContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.inactive_kazan))
+            }
+
+            val supplierNames = workOrder.suppliers.joinToString("\n") { it.supplierName }
+            singleSupplierValue.text = supplierNames
+
+            singleBaleCountValue.text = "${workOrder.baleCount} ${getString(R.string.adet)}"
+            singleTotalWeightValue.text = "${workOrder.totalWeight} ${getString(R.string.kg)}"
+            singleLastBaleValue.text = workOrder.lastBaleNumber
+            singleShiftBaleValue.text = "${workOrder.shiftBaleCount} ${getString(R.string.adet)}"
+        }
+    }
+
+    private fun startScreenToggleIfEnabled() {
+        if (!ENABLE_SECONDARY_SCREEN) {
+            return
+        }
+
+        val toggleRunnable = object : Runnable {
+            override fun run() {
+                isMainScreenVisible = !isMainScreenVisible
+                contentFlipper.displayedChild = if (isMainScreenVisible) 0 else 1
+                screenToggleHandler.postDelayed(this, 30_000)
+            }
+        }
+
+        screenToggleHandler.postDelayed(toggleRunnable, 30_000)
+    }
+
     private fun displayIpAddress() {
         val ipAddress = NetworkUtils.getLocalIpAddress(this)
         tvIpAddress.text = "IP: $ipAddress"
@@ -353,6 +463,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         timeUpdateHandler.removeCallbacksAndMessages(null)
+        screenToggleHandler.removeCallbacksAndMessages(null)
         viewModel.stopAutoRefresh()
     }
 

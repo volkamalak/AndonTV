@@ -45,7 +45,6 @@
             android:ellipsize="end"
             android:maxLines="3"
             android:lineSpacingExtra="2dp"
-
             android:textStyle="bold" />
 
     </LinearLayout>
