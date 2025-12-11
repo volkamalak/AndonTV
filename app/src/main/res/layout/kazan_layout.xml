@@ -1,107 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/inactive_kazan">
+    android:background="@color/inactive_kazan"
+    android:padding="12dp">
 
     <!-- Kazan Başlığı (SOL KAZAN / SAĞ KAZAN) -->
     <TextView
         android:id="@+id/tvKazanTitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/left_kazan"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:background="@color/primary"
         android:gravity="center"
         android:padding="12dp"
-        android:background="@color/primary"
-        android:layout_marginBottom="16dp" />
-
-    <!-- İş Emri Numarası (Büyük Font) -->
-    <TextView
-        android:id="@+id/tvWorkOrderNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="İŞ EMRİ: 12345"
+        android:text="@string/left_kazan"
         android:textColor="@color/white"
-        android:textSize="48sp"
         android:textStyle="bold"
-        android:gravity="center"
-        android:padding="24dp"
-        android:visibility="visible" />
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="22sp"
+        android:autoSizeMinTextSize="14sp"
+        android:autoSizeStepGranularity="1sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="spread" />
 
-    <!-- İş Emri Yok Mesajı -->
-    <TextView
-        android:id="@+id/tvNoWorkOrder"
-        android:layout_width="match_parent"
+    <!-- İş Emri Alanı (Tek konteyner, TextView'ler içeride) -->
+    <FrameLayout
+        android:id="@+id/workOrderContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/no_work_order"
-        android:textColor="@color/white"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="24dp"
-        android:visibility="gone" />
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvKazanTitle">
 
-    <!-- Bilgi Kartları için ScrollView -->
-    <ScrollView
-        android:id="@+id/scrollViewCards"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true"
-        android:visibility="visible">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvWorkOrderNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="İŞ EMRİ: 12345"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="42sp"
+            android:autoSizeMinTextSize="22sp"
+            android:autoSizeStepGranularity="2sp" />
 
-            <!-- Tedarikçi Bilgisi -->
-            <include
-                android:id="@+id/supplierCard"
-                layout="@layout/info_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp" />
+        <TextView
+            android:id="@+id/tvNoWorkOrder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/no_work_order"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="18sp"
+            android:autoSizeStepGranularity="2sp" />
+    </FrameLayout>
 
-            <!-- Balya Sayısı -->
-            <include
-                android:id="@+id/baleCountCard"
-                layout="@layout/info_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp" />
+    <!-- Bilgi Kartları (scroll olmadan ekrana sığması için eşit ağırlıklı kolon) -->
+    <LinearLayout
+        android:id="@+id/cardsContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="4dp"
+        android:weightSum="5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/workOrderContainer">
 
-            <!-- Toplam Ağırlık -->
-            <include
-                android:id="@+id/totalWeightCard"
-                layout="@layout/info_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp" />
+        <!-- Tedarikçi Bilgisi -->
+        <include
+            android:id="@+id/supplierCard"
+            layout="@layout/info_card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp" />
 
-            <!-- Son Balya Numarası -->
-            <include
-                android:id="@+id/lastBaleCard"
-                layout="@layout/info_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp" />
+        <!-- Balya Sayısı -->
+        <include
+            android:id="@+id/baleCountCard"
+            layout="@layout/info_card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp" />
 
-            <!-- Vardiya Balya Sayısı -->
-            <include
-                android:id="@+id/shiftBaleCountCard"
-                layout="@layout/info_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <!-- Toplam Ağırlık -->
+        <include
+            android:id="@+id/totalWeightCard"
+            layout="@layout/info_card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp" />
 
-        </LinearLayout>
-    </ScrollView>
+        <!-- Son Balya Numarası -->
+        <include
+            android:id="@+id/lastBaleCard"
+            layout="@layout/info_card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="8dp" />
 
-</LinearLayout>
+        <!-- Vardiya Balya Sayısı -->
+        <include
+            android:id="@+id/shiftBaleCountCard"
+            layout="@layout/info_card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
