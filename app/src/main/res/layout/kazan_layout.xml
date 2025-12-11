@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/primary"
         android:gravity="center"
+
         android:padding="10dp"
         android:text="@string/left_kazan"
         android:textColor="@color/white"
@@ -37,6 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvKazanTitle">
 
+
         <TextView
             android:id="@+id/tvWorkOrderNumber"
             android:layout_width="match_parent"
@@ -54,11 +56,13 @@
             android:maxLines="2"
             android:ellipsize="end" />
 
+
         <TextView
             android:id="@+id/tvNoWorkOrder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+
             android:padding="12dp"
             android:text="@string/no_work_order"
             android:textColor="@color/white"
@@ -68,6 +72,7 @@
             android:autoSizeMaxTextSize="28sp"
             android:autoSizeMinTextSize="14sp"
             android:autoSizeStepGranularity="1sp" />
+
     </FrameLayout>
 
     <!-- Bilgi Kartları (scroll olmadan ekrana sığması için eşit ağırlıklı kolon) -->
@@ -78,7 +83,9 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="4dp"
+
         android:paddingBottom="6dp"
+
         android:weightSum="5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

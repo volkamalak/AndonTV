@@ -13,8 +13,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+
 import androidx.lifecycle.ViewModelProvider
 import com.isletme.andontv.model.WorkOrder
 import com.isletme.andontv.utils.DateTimeUtils
@@ -29,10 +31,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: AndonViewModel
     private val timeUpdateHandler = Handler(Looper.getMainLooper())
 
+
     private lateinit var rootLayout: ConstraintLayout
     private lateinit var footerLayout: LinearLayout
     private lateinit var tvMachineName: TextView
     private lateinit var tvIpAddress: TextView
+
 
     private lateinit var leftKazanContainer: ConstraintLayout
     private lateinit var leftTvWorkOrderNumber: TextView
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var leftLastBaleValue: TextView
     private lateinit var leftShiftBaleTitle: TextView
     private lateinit var leftShiftBaleValue: TextView
+
 
     private lateinit var rightKazanContainer: ConstraintLayout
     private lateinit var rightTvWorkOrderNumber: TextView
@@ -149,8 +154,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
+
         rootLayout = findViewById(R.id.rootLayout)
         footerLayout = findViewById(R.id.footerLayout)
+
 
         tvMachineName = findViewById(R.id.tvMachineName)
         tvIpAddress = findViewById(R.id.tvIpAddress)
