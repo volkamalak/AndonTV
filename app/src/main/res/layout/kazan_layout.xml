@@ -38,6 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvKazanTitle">
 
+
         <TextView
             android:id="@+id/tvWorkOrderNumber"
             android:layout_width="match_parent"

@@ -13,6 +13,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
 import androidx.lifecycle.ViewModelProvider
 import com.isletme.andontv.model.WorkOrder
 import com.isletme.andontv.utils.DateTimeUtils
@@ -27,6 +31,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: AndonViewModel
     private val timeUpdateHandler = Handler(Looper.getMainLooper())
 
+
+    private lateinit var rootLayout: ConstraintLayout
+    private lateinit var footerLayout: LinearLayout
     private lateinit var tvMachineName: TextView
     private lateinit var tvIpAddress: TextView
 
@@ -75,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         setupFullscreenMode()
 
         bindViews()
+        applySystemBarInsets()
 
         viewModel = ViewModelProvider(this)[AndonViewModel::class.java]
 
@@ -146,6 +154,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
+
+        rootLayout = findViewById(R.id.rootLayout)
+        footerLayout = findViewById(R.id.footerLayout)
+
+
         tvMachineName = findViewById(R.id.tvMachineName)
         tvIpAddress = findViewById(R.id.tvIpAddress)
 
@@ -206,6 +219,25 @@ class MainActivity : AppCompatActivity() {
         tvTime = findViewById(R.id.tvTime)
 
         setupCardTitles()
+    }
+
+    private fun applySystemBarInsets() {
+        val rootInitialPadding = rootLayout.paddingBottom
+        val footerInitialPadding = footerLayout.paddingBottom
+
+        ViewCompat.setOnApplyWindowInsetsListener(rootLayout) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            view.setPadding(view.paddingLeft, view.paddingTop, view.paddingRight, rootInitialPadding + systemBars.bottom)
+            footerLayout.setPadding(
+                footerLayout.paddingLeft,
+                footerLayout.paddingTop,
+                footerLayout.paddingRight,
+                footerInitialPadding + systemBars.bottom
+            )
+
+            insets
+        }
     }
 
     private fun setupCardTitles() {
